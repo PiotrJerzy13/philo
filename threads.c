@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 15:30:33 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/19 18:37:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/20 11:55:49 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ void *philosopher_routine(void *arg)
 {
     int id;
 	pthread_mutex_t forks[NUM_PHILOSOPHERS];
-	// pthread_attr_t attr;
-	
-	// pthread_attr_init(&attr);
-	// pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	// pthread_attr_destroy(&attr);
 	
 	id = *(int *)arg;
     free(arg);
