@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/20 18:34:07 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/21 15:21:47 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,16 @@ typedef struct s_time
 
 typedef struct s_philo
 {
-	int			id;
-	int			meals_count;
-	int			has_eaten;
-	t_time		*time;
-	t_memories	*memories;
-	t_fork		*left_fork;
-	t_fork		*right_fork;
-	pthread_t	thread;
-	t_data		*data;
+	int				id;
+	int				meals_count;
+	int				has_eaten;
+	t_time			*time;
+	t_memories		*memories;
+	t_fork			*left_fork;
+	t_fork			*right_fork;
+	pthread_t		thread;
+	t_data			*data;
+	pthread_mutex_t	meals_count_mutex;
 }	t_philo;
 
 typedef struct fork
@@ -75,6 +76,9 @@ typedef struct s_data
 	t_time			*time;
 	t_memories		*memories;
 	pthread_mutex_t	waiter;
+	pthread_mutex_t	data_mutex;
+	pthread_mutex_t	total_meals_mutex;
+	int				total_meals;
 }	t_data;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/20 18:49:37 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:00:45 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ t_data	*init_data(int argc, char **argv)
 	t_memories	*memories;
 	t_data		*data;
 
+	memories = calloc(1, sizeof(t_memories));
 	memories->data = calloc(1, sizeof(t_data));
 	if (!memories)
 		return (NULL);
-	if (!allocate_and_track((void **)&memories->data, sizeof(t_data), memories))
+	if (!allocate((void **)&memories->data, sizeof(t_data), memories))
 		return (NULL);
 	data->num_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -52,7 +53,7 @@ t_data	*init_data(int argc, char **argv)
 	if (!allocate((void **)&memories->forks, data->num_philo
 			* sizeof(t_fork), memories))
 		return (NULL);
-	if (!allocate_and_track((void **)&memories->time, sizeof(t_time), memories))
+	if (!allocate((void **)&memories->time, sizeof(t_time), memories))
 		return (NULL);
 	data->memories = memories;
 	if (pthread_mutex_init(&(data->waiter), NULL) != 0)
@@ -61,4 +62,45 @@ t_data	*init_data(int argc, char **argv)
 		return (NULL);
 	}
 	return (data);
+}
+
+void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
+{
+	int	left_fork_id;
+	int	right_fork_id;
+
+	left_fork_id = philo->id;
+	right_fork_id = (philo->id + 1) % philo_position;
+	if (left_fork_id < right_fork_id)
+	{
+		philo->left_fork = &forks[left_fork_id];
+		philo->right_fork = &forks[right_fork_id];
+	}
+	else
+	{
+		philo->left_fork = &forks[right_fork_id];
+		philo->right_fork = &forks[left_fork_id];
+	}
+}
+
+bool	assign_mutexes(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philo)
+	{
+		if (pthread_mutex_init(&data->forks[i].fork, NULL) != 0)
+		{
+			printf("Error: Mutex initialization failed for fork %d.\n", i);
+			return (false);
+		}
+		i++;
+	}
+	if (pthread_mutex_init(&(data->waiter), NULL) != 0)
+	{
+		printf("Error: Mutex initialization failed for the waiter.\n");
+		return (false);
+	}
+	return (true);
 }
