@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   imput_checker.c                                    :+:      :+:    :+:   */
+/*   input_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:09:23 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/20 18:45:39 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/22 12:26:45 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	ft_atoi(const char *str)
 	return (nbr * sign);
 }
 
-static int	check_passed_arg(int argc, char **argv)
+int	check_passed_arg(int argc, char **argv)
 {
 	int	i;
 
@@ -89,12 +89,12 @@ static int	check_passed_arg(int argc, char **argv)
 			printf("Error: %d ('%s') is not a valid number.\n", i, argv[i]);
 			return (1);
 		}
+		if (ft_atoi(argv[i]) <= 0)
+		{
+			printf("Error: %d ('%s') must be a positive number.\n", i, argv[i]);
+			return (1);
+		}
 		i++;
-	}
-	if (ft_atoi(argv[i]) <= 0)
-	{
-		printf("Error: %d ('%s') must be a positive number.\n", i, argv[i]);
-		return (1);
 	}
 	return (0);
 }
