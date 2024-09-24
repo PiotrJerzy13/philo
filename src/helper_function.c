@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:37:47 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/21 21:09:37 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:11:12 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	safe_write(int *value_ptr, int new_value)
 	pthread_mutex_unlock(&mutex);
 }
 
-int	read_safe(pthread_mutex_t *mutex, int *value)
+int	read_safe(pthread_mutex_t *mutex, const int *value)
 {
 	int	result;
 

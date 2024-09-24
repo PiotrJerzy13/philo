@@ -4,7 +4,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 OBJDIR = ./bin
 SRCDIR = ./src
-SRC = start_dinner.c initialization.c routine.c threads.c mutex.c clean_memory.c helper_function.c input_checker.c time.c
+SRC = start_dinner.c initialization.c routine.c threads.c mutex.c clean_memory.c helper_function.c input_checker.c time.c death.c
 OBJS = $(SRC:%.c=$(OBJDIR)/%.o)
 
 # Compile source files into object files in the OBJDIR

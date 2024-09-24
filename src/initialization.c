@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/22 21:49:05 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:55:06 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*allocate(void **ptr, size_t size, t_memories *memories)
 
 void	set_eating_limits(int argc, char **argv, t_data *data)
 {
-	if (argc == MAX_ARGC)
+	if (argc == 6)
 		data->num_of_meals = ft_atoi(argv[5]);
 	else
 		data->num_of_meals = -1;
@@ -35,6 +35,7 @@ t_data	*init_data(int argc, char **argv)
 {
 	t_memories	*memories;
 	t_data		*data;
+	int			i;
 
 	memories = calloc(1, sizeof(t_memories));
 	data = NULL;
@@ -55,10 +56,6 @@ t_data	*init_data(int argc, char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
-	printf("Number of philosophers: %d\n", data->num_philo);
-	printf("Time to die: %d\n", data->time_to_die);
-	printf("Time to eat: %d\n", data->time_to_eat);
-	printf("Time to sleep: %d\n", data->time_to_sleep);
 	set_eating_limits(argc, argv, data);
 	if (!allocate((void **)&memories->philos,
 			data->num_philo * sizeof(t_philo), memories))
@@ -76,7 +73,7 @@ t_data	*init_data(int argc, char **argv)
 		return (NULL);
 	}
 	data->forks = memories->forks;
-	if (!data || !data->philos || !data->forks)
+	if (!data->philos || !data->forks)
 	{
 		printf("Error: Data, Philosopher, or Forks array is NULL.\n");
 		clean_memories(memories);
@@ -90,12 +87,13 @@ t_data	*init_data(int argc, char **argv)
 	}
 	init_time(memories->time, data->time_to_die, data->time_to_eat,
 		data->time_to_sleep);
-	data->memories = memories;
-	if (pthread_mutex_init(&(data->waiter), NULL) != 0)
+	i = 0;
+	while (i < data->num_philo)
 	{
-		printf("Error: Mutex initialization failed for the waiter.\n");
-		clean_memories(memories);
-		return (NULL);
+		data->philos[i].time = memories->time;
+		data->philos[i].memories = memories;
+		i++;
 	}
+	data->memories = memories;
 	return (data);
 }

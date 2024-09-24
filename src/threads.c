@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 11:19:53 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/22 21:42:34 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:09:29 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	create_philosopher_threads(t_data *data)
 	i = 0;
 	while (i < data->num_philo)
 	{
-		data->philos[i].id = i;
+		data->philos[i].id = i + 1;
 		data->philos[i].meals_count = 0;
 		if (pthread_mutex_init(&data->philos[i].meals_count_mutex, NULL) != 0)
 		{

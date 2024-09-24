@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/22 21:30:33 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:56:41 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/time.h>
-
-# define MIN_ARGC 5
-# define MAX_ARGC 6 
 
 typedef struct s_data		t_data;
 typedef struct s_memories	t_memories;
@@ -68,10 +65,11 @@ typedef struct s_data
 	t_fork			*forks;
 	t_time			*time;
 	t_memories		*memories;
-	pthread_mutex_t	waiter;
+	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	data_mutex;
 	pthread_mutex_t	total_meals_mutex;
 	int				total_meals;
+	bool			philo_dead;
 }	t_data;
 
 typedef struct s_memories
@@ -82,7 +80,6 @@ typedef struct s_memories
 	t_time		*time;
 }	t_memories;
 
-// Function Prototypes
 void	start_dinner(t_data *data);
 t_data	*init_data(int argc, char **argv);
 void	set_eating_limits(int argc, char **argv, t_data *data);
@@ -91,17 +88,22 @@ void	*philosopher_routine(void *arg);
 bool	create_philosopher_threads(t_data *data);
 void	philo_eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);
-void	philo_think(t_philo *philo);
-void	assign_mutex(pthread_mutex_t *mutex, const char *operation);
+void	philo_think(t_philo const *philo);
 bool	assign_mutexes(t_data *data, t_memories *memories);
 void	clean_memories(t_memories *memories);
-void	clean_memories_resources(t_memories *memories);
 void	safe_write(int *value_ptr, int new_value);
-int		read_safe(pthread_mutex_t *mutex, int *value);
+int		read_safe(pthread_mutex_t *mutex, const int *value);
 void	assign_forks(t_philo *philo, t_fork *forks, int philo_position);
 int		ft_atoi(const char *str);
 int		check_passed_arg(int argc, char **argv);
 void	init_time(t_time *time_data, int time_to_die,
 			int time_to_eat, int time_to_sleep);
+int		time_without_food(int last_meal);
+int		check_philosopher_starvation(t_philo *philo);
+void	*monitor_philosophers(void *arg);
+int		get_current_time_ms(void);
+int		time_from_start(t_time const *params);
+void	handle_philosopher_death(t_philo const *philo);
+void	clean_and_exit(t_memories *memories, const char *error_message);
 
 #endif

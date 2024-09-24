@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:09:23 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/22 12:26:45 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/23 16:05:22 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	check_passed_arg(int argc, char **argv)
 	int	i;
 
 	i = 1;
-	if (argc < MIN_ARGC || argc > MAX_ARGC)
+	if (argc < 5 || argc > 6)
 	{
 		printf("Error: Wrong number of arguments.\n");
 		return (1);
