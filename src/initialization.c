@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/23 17:55:06 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/29 22:22:27 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	*allocate(void **ptr, size_t size, t_memories *memories)
 {
-	*ptr = calloc(1, size);
+	*ptr = malloc(size);
 	if (!*ptr)
 	{
 		printf("Error: Memory allocation failed.\n");
-		free(memories);
+		if (memories)
+			clean_and_exit(memories, "Memory allocation error.");
+		return (NULL);
 	}
+	memset(*ptr, 0, size);
 	return (*ptr);
 }
 
@@ -31,68 +34,78 @@ void	set_eating_limits(int argc, char **argv, t_data *data)
 		data->num_of_meals = -1;
 }
 
-t_data	*init_data(int argc, char **argv)
+void	take_input(int argc, char **argv, t_data *data)
 {
-	t_memories	*memories;
-	t_data		*data;
-	int			i;
-
-	memories = calloc(1, sizeof(t_memories));
-	data = NULL;
-	if (!memories)
-	{
-		printf("Error: Failed to allocate memory for memories.\n");
-		return (NULL);
-	}
-	memories->data = calloc(1, sizeof(t_data));
-	if (!memories->data)
-	{
-		printf("Error: Failed to allocate memory for data.\n");
-		clean_memories(memories);
-		return (NULL);
-	}
-	data = memories->data;
 	data->num_philo = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
 	set_eating_limits(argc, argv, data);
+	data->all_eaten = 0;
+	data->philo_dead = 0;
+}
+
+bool	allocate_resources(t_data *data, t_memories *memories)
+{
+	if (memories->philos || memories->forks)
+	{
+		clean_and_exit(memories, "Memory was already allocated.");
+		return (false);
+	}
 	if (!allocate((void **)&memories->philos,
 			data->num_philo * sizeof(t_philo), memories))
 	{
-		printf("Error: Failed to allocate memory for philosophers.\n");
-		clean_memories(memories);
-		return (NULL);
+		clean_and_exit(memories, "Failed to allocate memory for philosophers.");
+		return (false);
 	}
-	data->philos = memories->philos;
 	if (!allocate((void **)&memories->forks,
 			data->num_philo * sizeof(t_fork), memories))
 	{
-		printf("Error: Failed to allocate memory for forks.\n");
-		clean_memories(memories);
-		return (NULL);
+		clean_and_exit(memories, "Failed to allocate memory for forks.");
+		return (false);
 	}
+	data->philos = memories->philos;
 	data->forks = memories->forks;
-	if (!data->philos || !data->forks)
+	return (true);
+}
+
+t_data	*init_data(int argc, char **argv)
+{
+	int			i;
+	t_memories	*memories = NULL;
+	t_data		*data = NULL;
+
+	memories = allocate((void **)&memories, sizeof(t_memories), NULL);
+	if (!memories)
 	{
-		printf("Error: Data, Philosopher, or Forks array is NULL.\n");
-		clean_memories(memories);
+		clean_and_exit(NULL, "Failed to allocate memories.");
 		return (NULL);
 	}
-	if (!allocate((void **)&memories->time, sizeof(t_time), memories))
+	data = allocate((void **)&memories->data, sizeof(t_data), memories);
+	if (!data)
 	{
-		printf("Error: Failed to allocate memory for time.\n");
-		clean_memories(memories);
+		clean_and_exit(memories, "Failed to allocate data.");
 		return (NULL);
 	}
-	init_time(memories->time, data->time_to_die, data->time_to_eat,
-		data->time_to_sleep);
+	take_input(argc, argv, data);
+	if (!allocate_resources(data, memories))
+	{
+		clean_and_exit(memories, "Failed to allocate resources.");
+		return (NULL);
+	}
 	i = 0;
 	while (i < data->num_philo)
 	{
-		data->philos[i].time = memories->time;
+		data->philos[i].time_to_die = ft_atoi(argv[2]);
+		data->philos[i].time_to_eat = ft_atoi(argv[3]);
+		data->philos[i].time_to_sleep = ft_atoi(argv[4]);
+		init_time(&data->philos[i].time);
+		if (argc == 6)
+			data->philos[i].num_of_meals = ft_atoi(argv[5]);
+		else
+			data->philos[i].num_of_meals = -1;
 		data->philos[i].memories = memories;
-		i++;
+		data->philos[i].data = data;
+		data->philos[i].id = i + 1;
+		data->philos[i].meals_count = 0;
+		i ++;
 	}
 	data->memories = memories;
 	return (data);

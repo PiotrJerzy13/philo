@@ -5,28 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 13:37:47 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/23 15:11:12 by pwojnaro         ###   ########.fr       */
+/*   Created: 2024/09/26 14:32:58 by pwojnaro          #+#    #+#             */
+/*   Updated: 2024/09/29 22:35:13 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	safe_write(int *value_ptr, int new_value)
+void	set_meal_time(t_philo *philo)
 {
-	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
-
-	pthread_mutex_lock(&mutex);
-	*value_ptr = new_value;
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_lock(&philo->meals_count_mutex);
+	philo->time.last_meal = get_current_time_ms();
+	pthread_mutex_unlock(&philo->meals_count_mutex);
 }
 
-int	read_safe(pthread_mutex_t *mutex, const int *value)
+uint64_t	get_meal_time(t_philo *philo)
 {
-	int	result;
+	uint64_t	time_of_last_meal;
 
-	pthread_mutex_lock(mutex);
-	result = *value;
-	pthread_mutex_unlock(mutex);
-	return (result);
+	pthread_mutex_lock(&philo->meals_count_mutex);
+	time_of_last_meal = philo->time.last_meal;
+	pthread_mutex_unlock(&philo->meals_count_mutex);
+	return (time_of_last_meal);
+}
+
+void	print_log(int id, char *state_log, uint64_t start_time_program)
+{
+	uint64_t	timestamp_in_ms;
+
+	timestamp_in_ms = (uint64_t)(get_current_time_ms() - start_time_program);
+	printf("%" PRIu64 " %d %s\n", timestamp_in_ms, id, state_log);
+}
+
+void	print_mutex_lock(t_philo *philo, char *state_log)
+{
+	if (death_mutex_check(philo) == 1)
+		return ;
+	pthread_mutex_lock(&philo->data->print_mutex);
+	print_log(philo->id, state_log, philo->time.start_time);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }

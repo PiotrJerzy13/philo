@@ -6,42 +6,38 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 13:24:43 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/23 17:56:19 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/29 22:39:05 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	clean_and_exit(t_memories *memories, const char *error_message)
-{
-	if (error_message)
-		printf("Error: %s\n", error_message);
-	clean_memories(memories);
-}
-
 void	start_dinner(t_data *data)
 {
-	pthread_t	monitor_thread;
-	int			i;
+	int	i;
 
 	if (!data)
-		return (clean_and_exit(NULL, "Data is NULL in start_dinner."));
-	if (!assign_mutexes(data, data->memories)
-		|| !create_philosopher_threads(data)
-		|| pthread_create(&monitor_thread, NULL,
-			monitor_philosophers, (void *)data) != 0)
 	{
-		return (clean_and_exit(data->memories,
-				"Failed during initialization."));
+		clean_and_exit(NULL, "Data is NULL in start_dinner.");
+		return ;
 	}
+	if (!assign_mutexes(data, data->memories)
+		|| !create_philosopher_threads(data))
+	{
+		clean_and_exit(data->memories, "Failed during initialization.");
+		return ;
+	}
+	monitor_thread(data);
 	i = 0;
 	while (i < data->num_philo)
 	{
-		pthread_join(data->philos[i].thread, NULL);
-		pthread_mutex_destroy(&data->philos[i].meals_count_mutex);
+		if (pthread_join(data->philos[i].thread, NULL) != 0)
+		{
+			printf("Error: Failed to join thread for philosopher %d.\n", i + 1);
+		}
 		i++;
 	}
-	pthread_join(monitor_thread, NULL);
+	pthread_join(data->checker_thread, NULL);
 	clean_memories(data->memories);
 }
 
