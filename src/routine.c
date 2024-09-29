@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 15:17:16 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:34:16 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/29 23:45:05 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,10 @@ void	philo_eat(t_philo *philo)
 {
 	if (death_mutex_check(philo) == 1)
 		return ;
-	if (philo->left_fork->fork_id < philo->right_fork->fork_id)
-	{
-		pthread_mutex_lock(&philo->left_fork->fork);
-		print_mutex_lock(philo, "has taken the left fork");
-		pthread_mutex_lock(&philo->right_fork->fork);
-		print_mutex_lock(philo, "has taken the right fork");
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->right_fork->fork);
-		print_mutex_lock(philo, "has taken the right fork");
-		pthread_mutex_lock(&philo->left_fork->fork);
-		print_mutex_lock(philo, "has taken the left fork");
-	}
+	pthread_mutex_lock(&philo->left_fork->fork);
+	print_mutex_lock(philo, "has taken the left fork");
+	pthread_mutex_lock(&philo->right_fork->fork);
+	print_mutex_lock(philo, "has taken the right fork");
 	set_meal_time(philo);
 	print_mutex_lock(philo, "is eating");
 	ft_usleep(philo->time_to_eat);
