@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:39:28 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:27:53 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,22 +89,20 @@ void		*philosopher_routine(void *arg);
 bool		create_philosopher_threads(t_data *data);
 bool		assign_mutexes(t_data *data, t_memories *memories);
 void		clean_memories(t_memories *memories);
-void		assign_forks(t_philo *philo, t_fork *forks, int philo_position);
+void		assign_forks(t_philo *philo, t_fork *forks, int num_philo);
 int			ft_atoi(const char *str);
 int			check_passed_arg(int argc, char **argv);
 void		init_time(t_time *time_data);
-uint64_t	time_without_food(uint64_t last_meal);
-uint64_t	time_from_start(t_time const *params);
 void		clean_and_exit(t_memories *memories, const char *error_message);
 uint64_t	get_current_time_ms(void);
 void		ft_usleep(uint64_t time_to_sleep_ms);
 void		set_meal_time(t_philo *philo);
 uint64_t	get_meal_time(t_philo *philo);
-void		print_log(int id, char	*state_log, \
-	u_int64_t start_time_program);
+void		print_log(int id, const char	*state_log,
+				u_int64_t start_time_program);
 void		monitor_thread(t_data *data);
 int			death_mutex_check(t_philo *philo);
 void		*is_philo_dead(void *arg);
-void		print_mutex_lock(t_philo *philo, char *state_log);
+void		print_mutex_lock(t_philo *philo, const char *state_log);
 
 #endif

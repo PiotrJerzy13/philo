@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 15:17:16 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 23:45:05 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:43:19 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	philo_eat(t_philo *philo)
 		pthread_mutex_lock(philo->data->nr_of_meals_mutex);
 		philo->data->total_meals += 1;
 		pthread_mutex_unlock(philo->data->nr_of_meals_mutex);
+		ft_usleep(100);
 	}
 }
 

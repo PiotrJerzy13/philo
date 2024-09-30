@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:13:44 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:11:33 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:25:55 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,17 @@ uint64_t	get_current_time_ms(void)
 	return (current_time);
 }
 
-uint64_t	time_from_start(t_time const *params)
-{
-	return (get_current_time_ms() - params->start_time);
-}
-
-uint64_t	time_without_food(uint64_t last_meal)
-{
-	uint64_t	current_time;
-
-	current_time = get_current_time_ms();
-	return (current_time - last_meal);
-}
-
 void	init_time(t_time *time_data)
 {
 	time_data->start_time = get_current_time_ms();
 	time_data->last_meal = time_data->start_time;
 }
 
-void	ft_usleep(u_int64_t time_to_do_sth)
+void	ft_usleep(uint64_t time_to_sleep_ms)
 {
-	u_int64_t	start_timestamp;
+	uint64_t	start_timestamp;
 
 	start_timestamp = get_current_time_ms();
-	while (get_current_time_ms() - start_timestamp < time_to_do_sth)
+	while (get_current_time_ms() - start_timestamp < time_to_sleep_ms)
 		usleep(100);
 }
