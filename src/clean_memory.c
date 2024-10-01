@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:56:27 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:30:17 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 20:05:05 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,17 @@ void	clean_memories(t_memories *memories)
 		num_philo = memories->data->num_philo;
 	else
 		num_philo = 0;
-	if (memories->philos)
+	if (memories->philos && memories->forks)
 	{
 		i = 0;
 		while (i < num_philo)
 		{
 			pthread_mutex_destroy(&memories->philos[i].meals_count_mutex);
-			pthread_mutex_destroy(&memories->philos[i].last_meal_mutex);
+			pthread_mutex_destroy(&memories->forks[i].fork);
 			i++;
 		}
 		free(memories->philos);
 		memories->philos = NULL;
-	}
-	if (memories->forks)
-	{
-		i = 0;
-		while (i < num_philo)
-		{
-			pthread_mutex_destroy(&memories->forks[i].fork);
-			i++;
-		}
 		free(memories->forks);
 		memories->forks = NULL;
 	}
@@ -50,12 +41,6 @@ void	clean_memories(t_memories *memories)
 	{
 		pthread_mutex_destroy(&memories->data->print_mutex);
 		pthread_mutex_destroy(&memories->data->death_mutex);
-		if (memories->data->nr_of_meals_mutex)
-		{
-			pthread_mutex_destroy(memories->data->nr_of_meals_mutex);
-			free(memories->data->nr_of_meals_mutex);
-			memories->data->nr_of_meals_mutex = NULL;
-		}
 		free(memories->data);
 		memories->data = NULL;
 	}

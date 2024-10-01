@@ -6,11 +6,26 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 09:10:26 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:33:33 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:43:39 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+bool	check_meals_eaten(t_data *data, t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meals_count_mutex);
+	if (data->max_num_meals != -1 && philo->meals_count >= data->max_num_meals)
+	{
+		pthread_mutex_lock(&data->death_mutex);
+		data->philo_dead = 1;
+		pthread_mutex_unlock(&data->death_mutex);
+		pthread_mutex_unlock(&philo->meals_count_mutex);
+		return (true);
+	}
+	pthread_mutex_unlock(&philo->meals_count_mutex);
+	return (false);
+}
 
 void	is_philo_dead_1(t_data *data)
 {
@@ -22,6 +37,8 @@ void	is_philo_dead_1(t_data *data)
 	while (i < data->num_philo)
 	{
 		philo = &data->philos[i];
+		if (check_meals_eaten(data, philo))
+			return ;
 		last_meal_time = get_meal_time(&data->philos[i]);
 		if (get_current_time_ms() - last_meal_time
 			>= data->philos[i].time_to_die)

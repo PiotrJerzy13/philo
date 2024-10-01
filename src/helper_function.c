@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:32:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/30 16:27:16 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:12:15 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_log(int id, const char *state_log, uint64_t start_time_program)
 	uint64_t	timestamp_in_ms;
 
 	timestamp_in_ms = (uint64_t)(get_current_time_ms() - start_time_program);
-	printf("%" PRIu64 " %d %s\n", timestamp_in_ms, id, state_log);
+	printf("%llu %d %s\n", timestamp_in_ms, id, state_log);
 }
 
 void	print_mutex_lock(t_philo *philo, const char *state_log)

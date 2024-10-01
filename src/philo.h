@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/30 16:27:53 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 22:02:13 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <string.h>
 # include <sys/time.h>
 # include <stdint.h>
-# include <inttypes.h> 
 
 typedef struct s_data		t_data;
 typedef struct s_memories	t_memories;
@@ -49,7 +48,7 @@ typedef struct s_philo
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	int				num_of_meals;
+	int				max_num_meals;
 	t_memories		*memories;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
@@ -62,7 +61,7 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				num_philo;
-	int				num_of_meals;
+	int				max_num_meals;
 	pthread_mutex_t	*nr_of_meals_mutex;
 	t_philo			*philos;
 	t_fork			*forks;
@@ -74,6 +73,7 @@ typedef struct s_data
 	int				philo_dead;
 	pthread_t		checker_thread;
 	int				all_eaten;
+	char			**argv;
 }	t_data;
 
 typedef struct s_memories

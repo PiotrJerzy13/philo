@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 11:19:53 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:41:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:16:16 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ bool	create_philosopher_threads(t_data *data)
 		data->philos[i].data = data;
 		if (pthread_mutex_init(&data->philos[i].meals_count_mutex, NULL) != 0)
 		{
-			printf("Error: Mutex initialization failed %d.\n", i + 1);
 			clean_memories(data->memories);
 			return (false);
 		}

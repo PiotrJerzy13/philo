@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/29 22:22:27 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/01 22:04:51 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	*allocate(void **ptr, size_t size, t_memories *memories)
 void	set_eating_limits(int argc, char **argv, t_data *data)
 {
 	if (argc == 6)
-		data->num_of_meals = ft_atoi(argv[5]);
+		data->max_num_meals = ft_atoi(argv[5]);
 	else
-		data->num_of_meals = -1;
+		data->max_num_meals = -1;
 }
 
 void	take_input(int argc, char **argv, t_data *data)
@@ -98,9 +98,9 @@ t_data	*init_data(int argc, char **argv)
 		data->philos[i].time_to_sleep = ft_atoi(argv[4]);
 		init_time(&data->philos[i].time);
 		if (argc == 6)
-			data->philos[i].num_of_meals = ft_atoi(argv[5]);
+			data->philos[i].max_num_meals = ft_atoi(argv[5]);
 		else
-			data->philos[i].num_of_meals = -1;
+			data->philos[i].max_num_meals = -1;
 		data->philos[i].memories = memories;
 		data->philos[i].data = data;
 		data->philos[i].id = i + 1;
@@ -110,3 +110,16 @@ t_data	*init_data(int argc, char **argv)
 	data->memories = memories;
 	return (data);
 }
+
+// void	init_philosopher(t_philo *philo, int id, t_memories *memories,
+// 		t_data *data, int argc, char **argv)
+// {
+// 	philo->id = id + 1;
+// 	philo->time_to_die = ft_atoi(argv[2]);
+// 	philo->time_to_eat = ft_atoi(argv[3]);
+// 	philo->time_to_sleep = ft_atoi(argv[4]);
+// 	init_time(&philo->time);
+// 	philo->meals_count = 0;
+// 	philo->memories = memories;
+// 	philo->data = data;
+// }
