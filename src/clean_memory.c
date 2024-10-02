@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:56:27 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 20:05:05 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:45:51 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,27 @@
 
 void	clean_memories(t_memories *memories)
 {
-	int	num_philo;
 	int	i;
 
+	i = 0;
 	if (!memories)
 		return ;
-	if (memories->data != NULL)
-		num_philo = memories->data->num_philo;
-	else
-		num_philo = 0;
-	if (memories->philos && memories->forks)
+	if (memories->philos && memories->forks && memories->data)
 	{
-		i = 0;
-		while (i < num_philo)
+		while (i < memories->data->num_philo)
 		{
 			pthread_mutex_destroy(&memories->philos[i].meals_count_mutex);
 			pthread_mutex_destroy(&memories->forks[i].fork);
 			i++;
 		}
-		free(memories->philos);
-		memories->philos = NULL;
-		free(memories->forks);
-		memories->forks = NULL;
 	}
+	free(memories->philos);
+	free(memories->forks);
 	if (memories->data)
 	{
 		pthread_mutex_destroy(&memories->data->print_mutex);
 		pthread_mutex_destroy(&memories->data->death_mutex);
 		free(memories->data);
-		memories->data = NULL;
 	}
 	free(memories);
 }

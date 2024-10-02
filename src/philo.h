@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 22:02:13 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:04:49 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,12 @@ typedef struct s_philo
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	int				max_num_meals;
 	t_memories		*memories;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
 	pthread_t		thread;
 	t_data			*data;
 	pthread_mutex_t	meals_count_mutex;
-	pthread_mutex_t	last_meal_mutex;
 }	t_philo;
 
 typedef struct s_data
@@ -104,5 +102,6 @@ void		monitor_thread(t_data *data);
 int			death_mutex_check(t_philo *philo);
 void		*is_philo_dead(void *arg);
 void		print_mutex_lock(t_philo *philo, const char *state_log);
+void		*handle_one_philo(t_philo *philo);
 
 #endif

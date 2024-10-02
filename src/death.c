@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 09:10:26 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 21:43:39 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:59:46 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,14 @@ int	death_mutex_check(t_philo *philo)
 	result = philo->data->philo_dead;
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	return (result);
+}
+
+void	*handle_one_philo(t_philo *philo)
+{
+	print_mutex_lock(philo, "has taken the left fork");
+	print_mutex_lock(philo, "died");
+	pthread_mutex_lock(&philo->data->death_mutex);
+	philo->data->philo_dead = 1;
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	return (NULL);
 }

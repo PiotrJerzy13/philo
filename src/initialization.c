@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 22:04:51 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:39:18 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,65 +42,53 @@ void	take_input(int argc, char **argv, t_data *data)
 	data->philo_dead = 0;
 }
 
-bool	allocate_resources(t_data *data, t_memories *memories)
+bool	allocate_resources(t_data **data, t_memories **memories, int num_philo)
 {
-	if (memories->philos || memories->forks)
+	while (true)
 	{
-		clean_and_exit(memories, "Memory was already allocated.");
+		*memories = allocate((void **)memories, sizeof(t_memories), NULL);
+		if (!(*memories))
+			break ;
+		*data = allocate((void **)&(*memories)->data,
+				sizeof(t_data), *memories);
+		if (!(*data))
+			break ;
+		if (!allocate((void **)&(*memories)->philos,
+				num_philo * sizeof(t_philo), *memories))
+			break ;
+		if (!allocate((void **)&(*memories)->forks,
+				num_philo * sizeof(t_fork), *memories))
+			break ;
+		break ;
+	}
+	if (!(*memories) || !(*data) || !(*memories)->philos || !(*memories)->forks)
+	{
+		clean_and_exit(*memories, "Failed to allocate memory.");
 		return (false);
 	}
-	if (!allocate((void **)&memories->philos,
-			data->num_philo * sizeof(t_philo), memories))
-	{
-		clean_and_exit(memories, "Failed to allocate memory for philosophers.");
-		return (false);
-	}
-	if (!allocate((void **)&memories->forks,
-			data->num_philo * sizeof(t_fork), memories))
-	{
-		clean_and_exit(memories, "Failed to allocate memory for forks.");
-		return (false);
-	}
-	data->philos = memories->philos;
-	data->forks = memories->forks;
+	(*data)->philos = (*memories)->philos;
+	(*data)->forks = (*memories)->forks;
 	return (true);
 }
 
 t_data	*init_data(int argc, char **argv)
 {
 	int			i;
-	t_memories	*memories = NULL;
-	t_data		*data = NULL;
+	t_memories	*memories;
+	t_data		*data;
 
-	memories = allocate((void **)&memories, sizeof(t_memories), NULL);
-	if (!memories)
-	{
-		clean_and_exit(NULL, "Failed to allocate memories.");
-		return (NULL);
-	}
-	data = allocate((void **)&memories->data, sizeof(t_data), memories);
-	if (!data)
-	{
-		clean_and_exit(memories, "Failed to allocate data.");
-		return (NULL);
-	}
-	take_input(argc, argv, data);
-	if (!allocate_resources(data, memories))
-	{
-		clean_and_exit(memories, "Failed to allocate resources.");
-		return (NULL);
-	}
+	memories = NULL;
+	data = NULL;
 	i = 0;
+	if (!allocate_resources(&data, &memories, ft_atoi(argv[1])))
+		return (NULL);
+	take_input(argc, argv, data);
 	while (i < data->num_philo)
 	{
 		data->philos[i].time_to_die = ft_atoi(argv[2]);
 		data->philos[i].time_to_eat = ft_atoi(argv[3]);
 		data->philos[i].time_to_sleep = ft_atoi(argv[4]);
 		init_time(&data->philos[i].time);
-		if (argc == 6)
-			data->philos[i].max_num_meals = ft_atoi(argv[5]);
-		else
-			data->philos[i].max_num_meals = -1;
 		data->philos[i].memories = memories;
 		data->philos[i].data = data;
 		data->philos[i].id = i + 1;
@@ -110,16 +98,3 @@ t_data	*init_data(int argc, char **argv)
 	data->memories = memories;
 	return (data);
 }
-
-// void	init_philosopher(t_philo *philo, int id, t_memories *memories,
-// 		t_data *data, int argc, char **argv)
-// {
-// 	philo->id = id + 1;
-// 	philo->time_to_die = ft_atoi(argv[2]);
-// 	philo->time_to_eat = ft_atoi(argv[3]);
-// 	philo->time_to_sleep = ft_atoi(argv[4]);
-// 	init_time(&philo->time);
-// 	philo->meals_count = 0;
-// 	philo->memories = memories;
-// 	philo->data = data;
-// }

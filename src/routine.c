@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 15:17:16 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 19:50:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:59:59 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,46 +70,17 @@ void	*philosopher_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->data->num_philo == 1)
-	{
-		print_mutex_lock(philo, "has taken the left fork");
-		print_mutex_lock(philo, "died");
-		pthread_mutex_lock(&philo->data->death_mutex);
-		philo->data->philo_dead = 1;
-		pthread_mutex_unlock(&philo->data->death_mutex);
-		return (NULL);
-	}
+		return (handle_one_philo(philo));
 	if (philo->id % 2 != 0)
 		ft_usleep(50);
 	while (death_mutex_check(philo) == 0)
 	{
 		if (philo->data->num_philo % 2 == 0)
-		{
-			while (death_mutex_check(philo) == 0)
-			{
-				if (philo->data->max_num_meals != -1
-					&& philo->meals_count >= philo->data->max_num_meals)
-				{
-					break ;
-				}
-				philo_eat_even(philo);
-				philo_sleep(philo);
-				philo_think(philo);
-			}
-		}
+			philo_eat_even(philo);
 		else
-		{
-			while (death_mutex_check(philo) == 0)
-			{
-				if (philo->data->max_num_meals != -1
-					&& philo->meals_count >= philo->data->max_num_meals)
-				{
-					break ;
-				}
-				philo_eat_odd(philo);
-				philo_sleep(philo);
-				philo_think(philo);
-			}
-		}
+			philo_eat_odd(philo);
+		philo_sleep(philo);
+		philo_think(philo);
 	}
 	return (NULL);
 }
