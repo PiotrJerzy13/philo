@@ -44,7 +44,7 @@ re: fclean all
 # CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=address -g
 # OBJDIR = ./bin
 # SRCDIR = ./src
-# SRC = start_dinner.c initialization.c routine.c thread_fork.c mutex.c clean_memory.c input_checker.c time.c death.c stop.c
+# SRC = start_dinner.c initialization.c routine.c thread_fork.c mutex.c clean_memory.c input_checker.c time.c death.c helper_function.c
 # OBJS = $(SRC:%.c=$(OBJDIR)/%.o)
 
 # # Compile source files into object files in the OBJDIR

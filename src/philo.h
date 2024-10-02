@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 16:04:49 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:31:00 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ typedef struct s_memories	t_memories;
 typedef struct s_time
 {
 	uint64_t	start_time;
-	uint64_t	time_to_die;
-	uint64_t	time_to_eat;
-	uint64_t	time_to_sleep;
 	uint64_t	last_meal;
 }	t_time;
 
@@ -60,18 +57,15 @@ typedef struct s_data
 {
 	int				num_philo;
 	int				max_num_meals;
-	pthread_mutex_t	*nr_of_meals_mutex;
 	t_philo			*philos;
 	t_fork			*forks;
 	t_time			*time;
 	t_memories		*memories;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
-	int				total_meals;
-	int				philo_dead;
 	pthread_t		checker_thread;
+	int				philo_dead;
 	int				all_eaten;
-	char			**argv;
 }	t_data;
 
 typedef struct s_memories
@@ -81,7 +75,6 @@ typedef struct s_memories
 	t_fork		*forks;
 }	t_memories;
 
-void		start_dinner(t_data *data);
 t_data		*init_data(int argc, char **argv);
 void		*philosopher_routine(void *arg);
 bool		create_philosopher_threads(t_data *data);
@@ -97,7 +90,7 @@ void		ft_usleep(uint64_t time_to_sleep_ms);
 void		set_meal_time(t_philo *philo);
 uint64_t	get_meal_time(t_philo *philo);
 void		print_log(int id, const char	*state_log,
-				u_int64_t start_time_program);
+				u_int64_t start_time);
 void		monitor_thread(t_data *data);
 int			death_mutex_check(t_philo *philo);
 void		*is_philo_dead(void *arg);
