@@ -6,29 +6,29 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 13:24:43 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 17:18:16 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:37:34 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	check_leaks(void)
+{
+	system("leaks philo");
+}
+
 void	start_dinner(t_data *data)
 {
 	int	i;
 
-	if (!data)
-	{
-		clean_and_exit(NULL, "Data is NULL in start_dinner.");
-		return ;
-	}
+	i = 0;
 	if (!assign_mutexes(data, data->memories)
 		|| !create_philosopher_threads(data))
 	{
-		clean_and_exit(data->memories, "Failed during initialization.");
+		clean_memories(data->memories);
 		return ;
 	}
 	monitor_thread(data);
-	i = 0;
 	while (i < data->num_philo)
 	{
 		if (pthread_join(data->philos[i].thread, NULL) != 0)
@@ -45,6 +45,7 @@ int	main(int argc, char **argv)
 {
 	t_data	*data;
 
+	atexit(check_leaks);
 	if (check_passed_arg(argc, argv) != 0)
 	{
 		return (1);

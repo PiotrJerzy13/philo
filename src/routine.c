@@ -6,44 +6,25 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 15:17:16 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 15:59:59 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:37:17 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_eat_odd(t_philo *philo)
+void	philo_eat(t_philo *philo)
 {
 	if (death_mutex_check(philo) == 1)
 		return ;
-	pthread_mutex_lock(&philo->left_fork->fork);
+	pthread_mutex_lock(philo->left_fork);
 	print_mutex_lock(philo, "has taken the left fork");
-	pthread_mutex_lock(&philo->right_fork->fork);
+	pthread_mutex_lock(philo->right_fork);
 	print_mutex_lock(philo, "has taken the right fork");
 	set_meal_time(philo);
 	print_mutex_lock(philo, "is eating");
 	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(&philo->right_fork->fork);
-	pthread_mutex_unlock(&philo->left_fork->fork);
-	pthread_mutex_lock(&philo->meals_count_mutex);
-	philo->meals_count += 1;
-	pthread_mutex_unlock(&philo->meals_count_mutex);
-	ft_usleep(100);
-}
-
-void	philo_eat_even(t_philo *philo)
-{
-	if (death_mutex_check(philo) == 1)
-		return ;
-	pthread_mutex_lock(&philo->left_fork->fork);
-	print_mutex_lock(philo, "has taken the left fork");
-	pthread_mutex_lock(&philo->right_fork->fork);
-	print_mutex_lock(philo, "has taken the right fork");
-	set_meal_time(philo);
-	print_mutex_lock(philo, "is eating");
-	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(&philo->right_fork->fork);
-	pthread_mutex_unlock(&philo->left_fork->fork);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_lock(&philo->meals_count_mutex);
 	philo->meals_count += 1;
 	pthread_mutex_unlock(&philo->meals_count_mutex);
@@ -76,9 +57,12 @@ void	*philosopher_routine(void *arg)
 	while (death_mutex_check(philo) == 0)
 	{
 		if (philo->data->num_philo % 2 == 0)
-			philo_eat_even(philo);
+			philo_eat(philo);
 		else
-			philo_eat_odd(philo);
+		{
+			philo_eat(philo);
+			ft_usleep(100);
+		}
 		philo_sleep(philo);
 		philo_think(philo);
 	}

@@ -6,13 +6,13 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 11:19:53 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 21:16:16 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:37:48 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	assign_forks(t_philo *philo, t_fork *forks, int num_philo)
+void	assign_forks(t_philo *philo, pthread_mutex_t *forks, int num_philo)
 {
 	int	left_fork_id;
 	int	right_fork_id;
@@ -38,10 +38,6 @@ bool	create_philosopher_threads(t_data *data)
 	i = 0;
 	while (i < data->num_philo)
 	{
-		data->philos[i].id = i + 1;
-		data->philos[i].meals_count = 0;
-		data->philos[i].memories = data->memories;
-		data->philos[i].data = data;
 		if (pthread_mutex_init(&data->philos[i].meals_count_mutex, NULL) != 0)
 		{
 			clean_memories(data->memories);

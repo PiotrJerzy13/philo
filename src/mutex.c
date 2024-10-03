@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 11:21:40 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/01 21:23:04 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:40:57 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ bool	assign_mutexes(t_data *data, t_memories *memories)
 	i = 0;
 	while (i < data->num_philo)
 	{
-		data->forks[i].fork_id = i;
-		if (pthread_mutex_init(&data->forks[i].fork, NULL) != 0)
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			break ;
 		if (pthread_mutex_init(&data->philos[i].meals_count_mutex, NULL) != 0)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 16:31:00 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:37:02 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,48 +31,43 @@ typedef struct s_time
 	uint64_t	last_meal;
 }	t_time;
 
-typedef struct s_fork
-{
-	pthread_mutex_t	fork;
-	int				fork_id;
-}	t_fork;
-
 typedef struct s_philo
 {
 	int				id;
 	int				meals_count;
-	t_time			time;
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	t_memories		*memories;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
 	pthread_t		thread;
 	t_data			*data;
+	t_time			time;
+	t_memories		*memories;
 	pthread_mutex_t	meals_count_mutex;
+	pthread_mutex_t	time_of_meal_mutex;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 }	t_philo;
 
 typedef struct s_data
 {
 	int				num_philo;
 	int				max_num_meals;
+	int				philo_dead;
+	int				all_eaten;	
 	t_philo			*philos;
-	t_fork			*forks;
 	t_time			*time;
 	t_memories		*memories;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	*forks;
 	pthread_t		checker_thread;
-	int				philo_dead;
-	int				all_eaten;
 }	t_data;
 
 typedef struct s_memories
 {
-	t_data		*data;
-	t_philo		*philos;
-	t_fork		*forks;
+	t_data			*data;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
 }	t_memories;
 
 t_data		*init_data(int argc, char **argv);
@@ -80,11 +75,9 @@ void		*philosopher_routine(void *arg);
 bool		create_philosopher_threads(t_data *data);
 bool		assign_mutexes(t_data *data, t_memories *memories);
 void		clean_memories(t_memories *memories);
-void		assign_forks(t_philo *philo, t_fork *forks, int num_philo);
+void		assign_forks(t_philo *philo, pthread_mutex_t *forks, int num_philo);
 int			ft_atoi(const char *str);
 int			check_passed_arg(int argc, char **argv);
-void		init_time(t_time *time_data);
-void		clean_and_exit(t_memories *memories, const char *error_message);
 uint64_t	get_current_time_ms(void);
 void		ft_usleep(uint64_t time_to_sleep_ms);
 void		set_meal_time(t_philo *philo);

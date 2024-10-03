@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:13:44 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 14:06:51 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:38:11 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ uint64_t	get_current_time_ms(void)
 	}
 	current_time = (uint64_t)(time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (current_time);
-}
-
-void	init_time(t_time *time_data)
-{
-	time_data->start_time = get_current_time_ms();
-	time_data->last_meal = time_data->start_time;
 }
 
 void	ft_usleep(uint64_t time_to_sleep_ms)

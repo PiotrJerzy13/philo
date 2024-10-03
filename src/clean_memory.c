@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:56:27 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 15:45:51 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:38:57 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	clean_memories(t_memories *memories)
 		while (i < memories->data->num_philo)
 		{
 			pthread_mutex_destroy(&memories->philos[i].meals_count_mutex);
-			pthread_mutex_destroy(&memories->forks[i].fork);
+			pthread_mutex_destroy(&memories->philos[i].time_of_meal_mutex);
+			pthread_mutex_destroy(&memories->forks[i]);
 			i++;
 		}
 	}
@@ -37,11 +38,4 @@ void	clean_memories(t_memories *memories)
 		free(memories->data);
 	}
 	free(memories);
-}
-
-void	clean_and_exit(t_memories *memories, const char *error_message)
-{
-	if (error_message)
-		printf("Error: %s\n", error_message);
-	clean_memories(memories);
 }

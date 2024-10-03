@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:32:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 16:30:51 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:34:48 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	set_meal_time(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->meals_count_mutex);
+	pthread_mutex_lock(&philo->time_of_meal_mutex);
 	philo->time.last_meal = get_current_time_ms();
-	pthread_mutex_unlock(&philo->meals_count_mutex);
+	pthread_mutex_unlock(&philo->time_of_meal_mutex);
 }
 
 uint64_t	get_meal_time(t_philo *philo)
 {
 	uint64_t	time_of_last_meal;
 
-	pthread_mutex_lock(&philo->meals_count_mutex);
+	pthread_mutex_lock(&philo->time_of_meal_mutex);
 	time_of_last_meal = philo->time.last_meal;
-	pthread_mutex_unlock(&philo->meals_count_mutex);
+	pthread_mutex_unlock(&philo->time_of_meal_mutex);
 	return (time_of_last_meal);
 }
 

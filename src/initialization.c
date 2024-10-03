@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:36:48 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/02 16:49:40 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:39:48 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,22 @@ void	*allocate(void **ptr, size_t size, t_memories *memories)
 	{
 		printf("Error: Memory allocation failed.\n");
 		if (memories)
-			clean_and_exit(memories, "Memory allocation error.");
+		{
+			clean_memories(memories);
+		}
 		return (NULL);
 	}
 	memset(*ptr, 0, size);
 	return (*ptr);
 }
 
-void	set_eating_limits(int argc, char **argv, t_data *data)
+void	take_input(int argc, char **argv, t_data *data)
 {
+	data->num_philo = ft_atoi(argv[1]);
 	if (argc == 6)
 		data->max_num_meals = ft_atoi(argv[5]);
 	else
 		data->max_num_meals = -1;
-}
-
-void	take_input(int argc, char **argv, t_data *data)
-{
-	data->num_philo = ft_atoi(argv[1]);
-	set_eating_limits(argc, argv, data);
 	data->all_eaten = 0;
 	data->philo_dead = 0;
 }
@@ -57,13 +54,13 @@ bool	allocate_resources(t_data **data, t_memories **memories, int num_philo)
 				num_philo * sizeof(t_philo), *memories))
 			break ;
 		if (!allocate((void **)&(*memories)->forks,
-				num_philo * sizeof(t_fork), *memories))
+				num_philo * sizeof(pthread_mutex_t), *memories))
 			break ;
 		break ;
 	}
 	if (!(*memories) || !(*data) || !(*memories)->philos || !(*memories)->forks)
 	{
-		clean_and_exit(*memories, "Failed to allocate memory.");
+		clean_memories(*memories);
 		return (false);
 	}
 	(*data)->philos = (*memories)->philos;
@@ -85,15 +82,16 @@ t_data	*init_data(int argc, char **argv)
 	take_input(argc, argv, data);
 	while (i < data->num_philo)
 	{
+		data->philos[i].id = i + 1;
+		data->philos[i].meals_count = 0;
+		data->philos[i].memories = memories;
+		data->philos[i].data = data;
 		data->philos[i].time_to_die = ft_atoi(argv[2]);
 		data->philos[i].time_to_eat = ft_atoi(argv[3]);
 		data->philos[i].time_to_sleep = ft_atoi(argv[4]);
-		init_time(&data->philos[i].time);
-		data->philos[i].memories = memories;
-		data->philos[i].data = data;
-		data->philos[i].id = i + 1;
-		data->philos[i].meals_count = 0;
-		i ++;
+		data->philos[i].time.start_time = get_current_time_ms();
+		data->philos[i].time.last_meal = data->philos[i].time.start_time;
+		i++;
 	}
 	data->memories = memories;
 	return (data);
