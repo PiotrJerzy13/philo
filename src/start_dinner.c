@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 13:24:43 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/04 14:33:32 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:45:35 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	main(int argc, char **argv)
 {
 	t_data	*data;
 
-	atexit(check_leaks);
 	if (argc < 5 || argc > 6)
 	{
 		printf("Error: Wrong number of arguments.\n");
