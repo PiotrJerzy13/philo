@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 09:10:26 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/04 16:58:54 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:50:22 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,26 @@
 
 bool	check_meals_eaten(t_data *data, t_philo *philo)
 {
+	if (philo->has_finished_meals)
+	{
+		return (false);
+	}
 	pthread_mutex_lock(&philo->meals_count_mutex);
 	if (data->max_num_meals != -1 && philo->meals_count >= data->max_num_meals)
 	{
-		pthread_mutex_lock(&data->death_mutex);
-		data->philo_dead = 1;
-		pthread_mutex_unlock(&data->death_mutex);
+		pthread_mutex_lock(&data->all_eaten_mutex);
+		if (!philo->has_finished_meals)
+		{
+			data->all_eaten += 1;
+			philo->has_finished_meals = true;
+		}
+		pthread_mutex_unlock(&data->all_eaten_mutex);
+		if (data->all_eaten >= data->num_philo)
+		{
+			pthread_mutex_lock(&data->death_mutex);
+			data->philo_dead = 1;
+			pthread_mutex_unlock(&data->death_mutex);
+		}
 		pthread_mutex_unlock(&philo->meals_count_mutex);
 		return (true);
 	}
@@ -37,17 +51,20 @@ void	stop_dinner(t_data *data)
 	while (i < data->num_philo)
 	{
 		philo = &data->philos[i];
-		if (check_meals_eaten(data, philo))
-			return ;
-		last_meal_time = get_meal_time(&data->philos[i]);
-		if (get_current_time_ms() - last_meal_time
-			>= data->philos[i].time_to_die)
+		if (!philo->has_finished_meals)
 		{
-			print_mutex_lock(philo, "died");
-			pthread_mutex_lock(&philo->data->death_mutex);
-			philo->data->philo_dead = 1;
-			pthread_mutex_unlock(&philo->data->death_mutex);
-			return ;
+			if (check_meals_eaten(data, philo))
+				return ;
+			last_meal_time = get_meal_time(&data->philos[i]);
+			if (get_current_time_ms() - last_meal_time
+				>= data->philos[i].time_to_die)
+			{
+				print_mutex_lock(philo, "died");
+				pthread_mutex_lock(&philo->data->death_mutex);
+				philo->data->philo_dead = 1;
+				pthread_mutex_unlock(&philo->data->death_mutex);
+				return ;
+			}
 		}
 		i++;
 	}

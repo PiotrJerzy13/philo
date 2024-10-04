@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 11:21:40 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/03 19:40:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:22:38 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ bool	assign_mutexes(t_data *data, t_memories *memories)
 	}
 	if (i < data->num_philo
 		|| pthread_mutex_init(&data->print_mutex, NULL) != 0
-		|| pthread_mutex_init(&data->death_mutex, NULL) != 0)
+		|| pthread_mutex_init(&data->death_mutex, NULL) != 0
+		|| pthread_mutex_init(&data->all_eaten_mutex, NULL) != 0)
 	{
 		printf("Error: Mutex initialization failed.\n");
 		clean_memories(memories);

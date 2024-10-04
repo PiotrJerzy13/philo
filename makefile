@@ -37,6 +37,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
-# uint64_t time_since_last_meal = get_current_time_ms() - last_meal_time;
-# printf("Philosopher %d died after %llu ms since the last meal.\n", philo->id, time_since_last_meal);

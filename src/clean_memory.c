@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:56:27 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/03 19:38:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:23:36 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	clean_memories(t_memories *memories)
 	{
 		pthread_mutex_destroy(&memories->data->print_mutex);
 		pthread_mutex_destroy(&memories->data->death_mutex);
+		pthread_mutex_destroy(&memories->data->all_eaten_mutex);
 		free(memories->data);
 	}
 	free(memories);

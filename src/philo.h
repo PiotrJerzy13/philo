@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/04 16:41:27 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:56:39 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_philo
 	pthread_mutex_t	time_of_meal_mutex;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	bool			has_finished_meals;
 }	t_philo;
 
 typedef struct s_data
@@ -60,6 +61,7 @@ typedef struct s_data
 	t_memories		*memories;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	all_eaten_mutex;
 	pthread_mutex_t	*forks;
 	pthread_t		checker_thread;
 }	t_data;
@@ -74,6 +76,7 @@ typedef struct s_memories
 t_data		*init_data(int argc, char **argv);
 bool		create_philosopher_threads(t_data *data);
 bool		assign_mutexes(t_data *data, t_memories *memories);
+bool		check_meals_eaten(t_data *data, t_philo *philo);
 uint64_t	get_current_time_ms(void);
 uint64_t	get_meal_time(t_philo *philo);
 int			death_mutex_check(t_philo *philo);
