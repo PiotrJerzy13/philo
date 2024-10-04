@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:20:59 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/03 19:37:02 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:35:04 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <string.h>
+# include <limits.h>
 # include <sys/time.h>
 # include <stdint.h>
 
@@ -82,7 +83,7 @@ uint64_t	get_current_time_ms(void);
 void		ft_usleep(uint64_t time_to_sleep_ms);
 void		set_meal_time(t_philo *philo);
 uint64_t	get_meal_time(t_philo *philo);
-void		print_log(int id, const char	*state_log,
+void		print_log(int id, const char	*state,
 				u_int64_t start_time);
 void		monitor_thread(t_data *data);
 int			death_mutex_check(t_philo *philo);

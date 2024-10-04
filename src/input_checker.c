@@ -6,20 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:09:23 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/23 16:05:22 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:00:50 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-	{
-		return (1);
-	}
-	return (0);
-}
 
 static int	is_number(const char *str)
 {
@@ -34,19 +25,32 @@ static int	is_number(const char *str)
 	{
 		i++;
 	}
-	if (!ft_isdigit(str[i]))
+	if (str[i] < '0' || str[i] > '9')
 	{
 		return (0);
 	}
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (str[i] < '0' || str[i] > '9')
 		{
 			return (0);
 		}
 		i++;
 	}
 	return (1);
+}
+
+long	check_overflow(long number, int sign, char digit)
+{
+	if (number > (LONG_MAX / 10) || (number == (LONG_MAX / 10)
+			&& (digit - '0') > (LONG_MAX % 10)))
+	{
+		if (sign == 1)
+			return (LONG_MAX);
+		else
+			return (LONG_MIN);
+	}
+	return (0);
 }
 
 int	ft_atoi(const char *str)
@@ -72,16 +76,40 @@ int	ft_atoi(const char *str)
 	return (nbr * sign);
 }
 
+long	ft_atol(char *str)
+{
+	long	number;
+	int		sign;
+	long	overflow;
+
+	number = 0;
+	sign = 1;
+	while (*str == ' ' || *str == '\t' || *str == '\n'
+		|| *str == '\v' || *str == '\f' || *str == '\r')
+		str++;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		overflow = check_overflow(number, sign, *str);
+		if (overflow != 0)
+			return (overflow);
+		number = number * 10 + (*str - '0');
+		str++;
+	}
+	return (number * sign);
+}
+
 int	check_passed_arg(int argc, char **argv)
 {
-	int	i;
+	int		i;
+	long	number;
 
 	i = 1;
-	if (argc < 5 || argc > 6)
-	{
-		printf("Error: Wrong number of arguments.\n");
-		return (1);
-	}
 	while (i < argc)
 	{
 		if (!is_number(argv[i]))
@@ -89,7 +117,13 @@ int	check_passed_arg(int argc, char **argv)
 			printf("Error: %d ('%s') is not a valid number.\n", i, argv[i]);
 			return (1);
 		}
-		if (ft_atoi(argv[i]) <= 0)
+		number = ft_atol(argv[i]);
+		if (number > INT_MAX)
+		{
+			printf("Error: %d ('%s') above the max value.\n", i, argv[i]);
+			return (1);
+		}
+		if (number <= 0)
 		{
 			printf("Error: %d ('%s') must be a positive number.\n", i, argv[i]);
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:32:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/10/03 19:34:48 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:31:03 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ uint64_t	get_meal_time(t_philo *philo)
 	return (time_of_last_meal);
 }
 
-void	print_log(int id, const char *state_log, uint64_t start_time)
+void	print_log(int id, const char *state, uint64_t start_time)
 {
 	uint64_t	timestamp_in_ms;
 
-	timestamp_in_ms = (uint64_t)(get_current_time_ms() - start_time);
-	printf("%llu %d %s\n", timestamp_in_ms, id, state_log);
+	timestamp_in_ms = (get_current_time_ms() - start_time);
+	printf("%llu %d %s\n", (unsigned long long)timestamp_in_ms, id, state);
 }
 
 void	print_mutex_lock(t_philo *philo, const char *state_log)
