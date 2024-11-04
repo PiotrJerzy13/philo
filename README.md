@@ -2,6 +2,8 @@
 
 The **Philosophers** project is an implementation of the classic dining philosophers problem, which explores concurrency issues like deadlock and resource sharing. In this simulation, multiple philosophers sit at a round table with a bowl of spaghetti in the center, attempting to alternate between thinking, eating, and sleeping without starving.
 
+![Philosopher Image](./assets/images.jpeg)
+
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Rules and Constraints](#rules-and-constraints)
@@ -10,7 +12,6 @@ The **Philosophers** project is an implementation of the classic dining philosop
 - [Simulation Output](#simulation-output)
 - [Example](#example)
 
-![Philosopher Image](./assets/images.jpeg)
 
 ## Project Overview
 
