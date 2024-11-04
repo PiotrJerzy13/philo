@@ -10,6 +10,8 @@ The **Philosophers** project is an implementation of the classic dining philosop
 - [Simulation Output](#simulation-output)
 - [Example](#example)
 
+![Philosopher Image](./assets/images(1).jpng)
+
 ## Project Overview
 
 The project simulates philosophers trying to eat spaghetti without dying of starvation. This README provides the necessary information to understand, build, and run the simulation.
@@ -125,8 +127,10 @@ The simulation will continue until either all philosophers have eaten the specif
   - To avoid deadlock, this project implements **Dijkstra’s solution** for the dining philosophers problem. This approach ensures that each philosopher only picks up forks when both are available, preventing the classic deadlock scenario where each philosopher holds one fork and waits indefinitely for the other.
   - Additionally, **staggered start times** are used based on philosopher IDs:
     - Philosophers with odd-numbered IDs start their routines slightly later, allowing forks to be available in a non-simultaneous pattern. This staggered approach further helps prevent contention and starvation.
+      
 - **Concurrency Challenges**:
   - Be mindful of potential **deadlocks** and **starvation issues** when working with shared resources (forks). Using mutexes and carefully structuring the timing logic helps ensure that each philosopher has a fair chance to eat without blocking indefinitely.
+    
 - **Routine Execution**:
   - Each philosopher follows a sequential routine: **eating**, **sleeping**, and **thinking**, with each state change logged precisely to track philosopher status.
   - For simulations with a single philosopher, a specific routine is used to manage the single available fork, as they cannot eat with only one fork.
