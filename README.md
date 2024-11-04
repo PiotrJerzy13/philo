@@ -10,7 +10,7 @@ The **Philosophers** project is an implementation of the classic dining philosop
 - [Simulation Output](#simulation-output)
 - [Example](#example)
 
-![Philosopher Image](./assets/images (1).jpg)
+![Philosopher Image](./assets/images.jpeg)
 
 ## Project Overview
 
